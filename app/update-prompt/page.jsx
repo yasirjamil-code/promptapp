@@ -1,7 +1,7 @@
 "use client";
 import Form from "@/components/Form";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 
 const EditPrompt = () => {
   const [submitting, setSubmitting] = useState(false);
@@ -15,9 +15,9 @@ const EditPrompt = () => {
     setSubmitting(true);
 
     if (!promptId) {
-      alert('PromptId not found');
+      alert("PromptId not found");
       setSubmitting(false);
-      return;  // Early return if no promptId
+      return; // Early return if no promptId
     }
 
     try {
@@ -35,7 +35,7 @@ const EditPrompt = () => {
       if (response.ok) {
         router.push("/");
       } else {
-        console.log('Failed to update prompt');
+        console.log("Failed to update prompt");
       }
     } catch (error) {
       console.log(error);
@@ -67,15 +67,17 @@ const EditPrompt = () => {
   }, [promptId]);
 
   return (
-    <div>
-      <Form
-        type="Edit"
-        post={post}
-        setPost={setPost}
-        submitting={submitting}
-        handleSubmit={updatePrompt}
-      />
-    </div>
+    <Suspense fallback={<div>Loading...</div>}>
+      <div>
+        <Form
+          type="Edit"
+          post={post}
+          setPost={setPost}
+          submitting={submitting}
+          handleSubmit={updatePrompt}
+        />
+      </div>
+    </Suspense>
   );
 };
 
